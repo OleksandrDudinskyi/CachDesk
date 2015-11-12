@@ -1,10 +1,13 @@
-package com.example.duo.cashdesk;
+package com.example.duo.cashdesk.view;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.duo.cashdesk.R;
+import com.example.duo.cashdesk.model.InventoryDataHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +43,10 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
         mHolderList.addAll(holderList);
         notifyDataSetChanged();
 
+    }
+
+    public List<InventoryDataHolder> getHolderList() {
+        return mHolderList;
     }
 
     class InventoryHolder extends RecyclerView.ViewHolder {

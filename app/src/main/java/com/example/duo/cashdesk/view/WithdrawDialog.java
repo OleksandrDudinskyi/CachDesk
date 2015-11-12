@@ -1,12 +1,15 @@
-package com.example.duo.cashdesk;
+package com.example.duo.cashdesk.view;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.widget.EditText;
+
+import com.example.duo.cashdesk.R;
 
 /**
  * @author o.dudinskyi(dudinskyj@gmail.com)
@@ -15,6 +18,7 @@ public class WithdrawDialog extends DialogFragment implements DialogInterface.On
 
     private EditText withdrawAmount;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         withdrawAmount = new EditText(getActivity());
@@ -30,7 +34,7 @@ public class WithdrawDialog extends DialogFragment implements DialogInterface.On
 
         String value = withdrawAmount.getText().toString();
         MainActivity callingActivity = (MainActivity) getActivity();
-        callingActivity.onUserSelectValue(value);
+        callingActivity.onUserSelectValue(Integer.parseInt(value));
         dialog.dismiss();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.duo.cashdesk;
+package com.example.duo.cashdesk.view;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,16 +9,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.duo.cashdesk.R;
+import com.example.duo.cashdesk.controller.CashDeskController;
 
 /**
  * @author o.dudinskyi(dudinskyj@gmail.com)
  */
 public class MainActivity extends AppCompatActivity {
-    private static final int DEFAULT_INVENTORY_VALUE = 0;
     private InventoryAdapter mInventoryAdapter;
+    private CashDeskController cashDeskController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +27,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.inventory_list);
+        cashDeskController = new CashDeskController();
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mInventoryAdapter = new InventoryAdapter(getData());
+        mInventoryAdapter = new InventoryAdapter(cashDeskController.getDefaultInventory(getResources()));
         recyclerView.setAdapter(mInventoryAdapter);
         setSupportActionBar(toolbar);
 
@@ -48,20 +50,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private List<InventoryDataHolder> getData() {
-        final int[] denominationArray = getResources().getIntArray(R.array.denomination_array);
-        final int[] inventoryArray = getResources().getIntArray(R.array.inventory_array);
-        final int denominationSize = denominationArray.length;
-        final int inventorySize = denominationArray.length;
-        List<InventoryDataHolder> inventoryDataHolders = new ArrayList<>();
-        for (int i = 0; i < denominationSize; i++) {
-            inventoryDataHolders.add(new InventoryDataHolder(denominationArray[i], i < inventorySize ? inventoryArray[i] : DEFAULT_INVENTORY_VALUE));
+    public void onUserSelectValue(int selectedValue) {
+        if (cashDeskController.canBeWithdrawn(mInventoryAdapter.getHolderList(), selectedValue)) {
+            mInventoryAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(this, R.string.error_message, Toast.LENGTH_LONG).show();
         }
-        return inventoryDataHolders;
-    }
-
-    public void onUserSelectValue(String selectedValue) {
-
     }
 
     @Override
@@ -77,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (id == R.id.refresh_item) {
-            mInventoryAdapter.setHolderList(getData());
+            mInventoryAdapter.setHolderList(cashDeskController.getDefaultInventory(getResources()));
             return true;
         }
         return super.onOptionsItemSelected(item);

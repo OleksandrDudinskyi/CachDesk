@@ -1,4 +1,4 @@
-package com.example.duo.cashdesk;
+package com.example.duo.cashdesk.model;
 
 /**
  * @author o.dudinskyi(dudinskyj@gmail.com)
